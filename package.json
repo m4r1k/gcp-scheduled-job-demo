@@ -1,5 +1,6 @@
 {
   "name": "gcp-scheduled-job-demo",
+  "description": "GCP Demo: Distributing a scheduled job over Cloud Scheduler and Cloud Tasks tasks",
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
