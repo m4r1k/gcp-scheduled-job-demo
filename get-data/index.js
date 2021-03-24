@@ -36,8 +36,6 @@ const demoData = [
 exports.getData = async (req, res) => {
   console.log('Getting data and sending it to someone...');
 
-  console.log('endpoint', endpoint);
-
   const options = {
     method: 'POST',
     body: JSON.stringify(demoData),
