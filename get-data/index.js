@@ -34,7 +34,7 @@ const demoData = [
  * @description This function is fired by Cloud Scheduler. It simply fetches and returns a small set of data.
  */
 exports.getData = async (req, res) => {
-  console.log('Getting data and sending it to someone...');
+  console.log('Getting data and sending it along...');
 
   const options = {
     method: 'POST',
