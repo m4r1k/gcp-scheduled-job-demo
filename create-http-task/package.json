@@ -1,0 +1,14 @@
+{
+  "name": "create-http-task",
+  "description": "Google App Engine Cloud Tasks example.",
+  "license": "MIT",
+  "scripts": {
+    "start": "npx functions-framework --target=createHttpTask"
+  },
+  "dependencies": {
+    "@google-cloud/tasks": "^2.3.0"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^1.7.1"
+  }
+}
