@@ -5,7 +5,6 @@ export APPENGINE_REGION="europe-west"
 export SCHEDULER_ID="tasks-scheduler"
 export QUEUE_ID="tasks-queue"
 export TOPIC_ID="tasks-topic"
-export EVENTARC_TRIGGER_FUNCTION="tasks-createHttpTask" # The service that will be called by EventArc
 
 # Service accounts
 export SCHEDULER_USERNAME="sa-scheduler"
@@ -16,6 +15,10 @@ export CREATEHTTPTASK_USERNAME="sa-create-http-task"
 export CREATEHTTPTASK_DISPLAYNAME="SA for createHttpTask function"
 export TASKHANDLER_USERNAME="sa-task-handler"
 export TASKHANDLER_DISPLAYNAME="SA for task-handler Cloud Run service"
+
+# Get billing ID
+gcloud alpha billing accounts list
+export BILLING_ID="your-billing-id" # From above
 
 # Update gcloud
 gcloud components update
@@ -28,8 +31,6 @@ export PROJECT_NUMBER=$(gcloud projects list --filter="project_id:$PROJECT_ID" -
 
 # Enable billing
 gcloud services enable cloudbilling.googleapis.com
-gcloud alpha billing accounts list
-export BILLING_ID="your-billing-id" # From above
 gcloud alpha billing projects link $PROJECT_ID --billing-account $BILLING_ID
 
 # Enable APIs
@@ -42,7 +43,6 @@ gcloud services enable run.googleapis.com
 gcloud services enable appengine.googleapis.com
 gcloud services enable pubsub.googleapis.com
 gcloud services enable appengine.googleapis.com
-gcloud services enable eventarc.googleapis.com
 
 # Create service accounts
 gcloud iam service-accounts create $SCHEDULER_USERNAME \
@@ -103,9 +103,12 @@ cd get-data
 sh deploy.sh
 cd ..
 
-# Create scheduler; do not forget to set the "uri" value! # your-get-data-function-endpoint
+# Create scheduler
+# Do not forget to set the "uri" value! # your-get-data-function-endpoint
 gcloud beta scheduler jobs create http $SCHEDULER_ID \
   --schedule "every 1 mins" \
   --uri "https://europe-west1-$PROJECT_ID.cloudfunctions.net/tasks-getData" \
   --http-method GET \
   --oidc-service-account-email $SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com
+
+echo "Congratulations! The entire flow should now be up and running once every minute. Check the logs at https://console.cloud.google.com/logs/ and see what you find."
