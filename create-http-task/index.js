@@ -7,7 +7,7 @@ const QUEUE_ID = process.env.QUEUE_ID || 'your-queue-id';
 const REGION = process.env.REGION || 'europe-west1';
 const URL = process.env.TASK_URL || 'your-cloud-run-task-handler-endpoint'; // Task handler endpoint
 const SERVICE_ACCOUNT_EMAIL =
-  `${process.env.HTTP_TASK_SA}@${PROJECT_ID}.iam.gserviceaccount.com` ||
+  `${process.env.SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com` ||
   `sa-create-http-task@${PROJECT_ID}.iam.gserviceaccount.com`;
 const PARENT = client.queuePath(PROJECT_ID, REGION, QUEUE_ID);
 const WAIT_FOR_SECONDS = 0;
@@ -15,8 +15,9 @@ const WAIT_FOR_SECONDS = 0;
 /**
  * @description This function creates a set of tasks of the incoming data (data pulled with Cloud Scheduler).
  */
-exports.createHttpTask = async (req, res) => {
-  const payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+exports.createHttpTask = async (message, context) => {
+  const _data = Buffer.from(message.data, 'base64').toString();
+  const payload = typeof _data === 'string' ? JSON.parse(_data) : _data;
 
   try {
     if (payload && payload.length > 0) {
@@ -58,8 +59,8 @@ exports.createHttpTask = async (req, res) => {
       await Promise.all(createTasks);
     }
 
-    res.send(`Done`);
+    console.log('Done');
   } catch (error) {
-    res.status(400).send(`An error occurred: ${error}`);
+    console.error(error);
   }
 };

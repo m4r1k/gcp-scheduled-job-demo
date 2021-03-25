@@ -1,6 +1,7 @@
-const fetch = require('node-fetch');
+const { PubSub } = require('@google-cloud/pubsub');
 
-const endpoint = process.env.TASK_ENDPOINT || 'your-create-http-task-function-endpoint';
+const PROJECT_ID = process.env.PROJECT_ID || 'your-project-id';
+const TOPIC_ID = process.env.TOPIC_ID || 'my-topic';
 
 const demoData = [
   {
@@ -32,22 +33,20 @@ const demoData = [
 
 /**
  * @description This function is fired by Cloud Scheduler. It simply fetches and returns a small set of data.
+ * It then offloads the data processing to Pub/Sub, which in turn will fire a function to slice data into a task queue.
  */
 exports.getData = async (req, res) => {
   console.log('Getting data and sending it along...');
 
-  const options = {
-    method: 'POST',
-    body: JSON.stringify(demoData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+  const pubSubClient = new PubSub({ projectId: PROJECT_ID });
+  const dataBuffer = Buffer.from(JSON.stringify(demoData));
 
-  // Offload data to task queue
-  // TODO: Doing it this way requires (?) that the endpoint is public, at least I am not sure how to make it private and actually have it working...
-  // --> It seems our service account is not being used as a caller?
-  await fetch(endpoint, options)
-    .then(() => res.status(200).send(demoData))
-    .catch(() => res.status(400).send('An error occured!'));
+  try {
+    const messageId = await pubSubClient.topic(TOPIC_ID).publish(dataBuffer);
+    console.log(`Message ${messageId} published.`);
+    res.status(200).send(demoData);
+  } catch (error) {
+    console.error(`Received error while publishing: ${error.message}`);
+    res.status(400).send('An error occured!');
+  }
 };

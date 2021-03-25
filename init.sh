@@ -1,10 +1,13 @@
-export PROJECT_ID="set-your-project-name-here" # EDIT THIS!
+export PROJECT_ID="your-project-id" # EDIT THIS!
 
 export REGION="europe-north1"
 export APPENGINE_REGION="europe-west"
 export SCHEDULER_ID="tasks-scheduler"
 export QUEUE_ID="tasks-queue"
+export TOPIC_ID="tasks-topic"
+export EVENTARC_TRIGGER_FUNCTION="tasks-createHttpTask" # The service that will be called by EventArc
 
+# Service accounts
 export SCHEDULER_USERNAME="sa-scheduler"
 export SCHEDULER_DISPLAYNAME="SA for scheduler"
 export GETDATA_USERNAME="sa-get-data"
@@ -26,7 +29,7 @@ export PROJECT_NUMBER=$(gcloud projects list --filter="project_id:$PROJECT_ID" -
 # Enable billing
 gcloud services enable cloudbilling.googleapis.com
 gcloud alpha billing accounts list
-export BILLING_ID="1234" # From above
+export BILLING_ID="your-billing-id" # From above
 gcloud alpha billing projects link $PROJECT_ID --billing-account $BILLING_ID
 
 # Enable APIs
@@ -39,6 +42,7 @@ gcloud services enable run.googleapis.com
 gcloud services enable appengine.googleapis.com
 gcloud services enable pubsub.googleapis.com
 gcloud services enable appengine.googleapis.com
+gcloud services enable eventarc.googleapis.com
 
 # Create service accounts
 gcloud iam service-accounts create $SCHEDULER_USERNAME \
@@ -53,38 +57,7 @@ gcloud iam service-accounts create $GETDATA_USERNAME \
 gcloud iam service-accounts create $TASKHANDLER_USERNAME \
   --display-name $TASKHANDLER_DISPLAYNAME
 
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member serviceAccount:$CREATEHTTPTASK_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
-  --role roles/cloudtasks.enqueuer
-
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member serviceAccount:$CREATEHTTPTASK_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
-  --role roles/iam.serviceAccountUser
-
-# Deploy Cloud Functions and Cloud Run
-cd get-data
-sh deploy.sh
-cd ..
-cd create-http-task
-sh deploy.sh
-cd ..
-cd task-handler
-sh deploy.sh
-cd ..
-
-# Activate App Engine (hosts Scheduler and Tasks?)
-gcloud app create --region $APPENGINE_REGION
-
-# Create scheduler
-gcloud beta scheduler jobs create http $SCHEDULER_ID \
-  --schedule "every 1 mins" \
-  --uri "your-get-data-function-endpoint" \
-  --http-method GET \
-  --oidc-service-account-email $SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com
-
-# Create task queue
-gcloud tasks queues create $QUEUE_ID
-
+# Set service account roles
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
   --role roles/cloudscheduler.admin
@@ -93,11 +66,46 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
   --role roles/cloudfunctions.invoker
 
-# TODO: It seems our service account is not being used as a caller when using fetch(); we will set this as "public"
-# gcloud projects add-iam-policy-binding $PROJECT_ID \
-#   --member serviceAccount:$GETDATA_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
-#   --role roles/cloudfunctions.invoker
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member serviceAccount:$GETDATA_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
+  --role roles/pubsub.publisher
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member serviceAccount:$CREATEHTTPTASK_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
+  --role roles/cloudtasks.enqueuer
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member serviceAccount:$CREATEHTTPTASK_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
+  --role roles/iam.serviceAccountUser
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member serviceAccount:$CREATEHTTPTASK_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
   --role roles/run.invoker
+
+# Activate App Engine (hosts Scheduler and Tasks)
+gcloud app create --region $APPENGINE_REGION
+
+# Create Pub/Sub topic
+gcloud pubsub topics create $TOPIC_ID
+
+# Create task queue
+gcloud tasks queues create $QUEUE_ID
+
+# Deploy Cloud Functions and Cloud Run
+cd task-handler
+sh deploy.sh
+cd ..
+echo "Now you should add the Cloud Run endpoint to create-http-task/deploy.sh!"
+cd create-http-task
+sh deploy.sh
+cd ..
+cd get-data
+sh deploy.sh
+cd ..
+
+# Create scheduler; do not forget to set the "uri" value! # your-get-data-function-endpoint
+gcloud beta scheduler jobs create http $SCHEDULER_ID \
+  --schedule "every 1 mins" \
+  --uri "https://europe-west1-PROJECT_ID.cloudfunctions.net/tasks-getData" \
+  --http-method GET \
+  --oidc-service-account-email $SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com

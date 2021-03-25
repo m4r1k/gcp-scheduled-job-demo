@@ -2,10 +2,10 @@
 
 This repo demonstrates how to:
 
-- Set up a **scheduled activity (using Cloud Scheduler)** that pulls data (an array of objects) from local data in a **Cloud Function**,
-- Divide the retrieved data in **Cloud Tasks** (done in a separate Cloud Function), to create individual tasks per data object,
+- Set up a **scheduled activity (using Cloud Scheduler)** that pulls data (an array of objects) from local data in a **Cloud Function** that offloads the data to **Pub/Sub**...
+- Which in turn has a Cloud Function trigger on a topic, that divides the retrieved data into **Cloud Tasks**, so that the individual pieces of data are handled uniquely, then...
 - Run a service on **Cloud Run** to do something with the data from each individual task.
-- Bonus: Creating and using separate service accounts for each service.
+- Bonus: Creating and using separate service accounts for each service and using a completely private setup.
 
 ![GCP architecture map](docs/gcp.png)
 ![GCP logging output](docs/logging.png)
