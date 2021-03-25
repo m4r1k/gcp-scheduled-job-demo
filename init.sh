@@ -106,6 +106,6 @@ cd ..
 # Create scheduler; do not forget to set the "uri" value! # your-get-data-function-endpoint
 gcloud beta scheduler jobs create http $SCHEDULER_ID \
   --schedule "every 1 mins" \
-  --uri "https://europe-west1-PROJECT_ID.cloudfunctions.net/tasks-getData" \
+  --uri "https://europe-west1-$PROJECT_ID.cloudfunctions.net/tasks-getData" \
   --http-method GET \
   --oidc-service-account-email $SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com
