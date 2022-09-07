@@ -4,7 +4,7 @@ ENTRY_POINT="getData"
 
 # Deploy
 gcloud functions deploy $FUNCTION_NAME \
-  --region $REGION \
+  --region $FUNCTIONS_REGION \
   --trigger-http \
   --runtime "nodejs14" \
   --timeout 10 \

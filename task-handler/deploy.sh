@@ -2,11 +2,11 @@
 SERVICE_NAME="task-handler"
 
 gcloud artifacts repositories create $REGISTRY_NAME \
-  --location=$REGION \
+  --location=$RUN_REGION \
   --repository-format=docker
 
 gcloud run deploy $SERVICE_NAME \
-  --region $REGION \
+  --region $RUN_REGION \
   --platform managed \
   --source . \
   --memory 1Gi \
@@ -15,4 +15,4 @@ gcloud run deploy $SERVICE_NAME \
   --allow-unauthenticated \
   --service-account $TASKHANDLER_USERNAME
 
-export TASK_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format=json|jq .status.url|sed "s/\"//g")
+export TASK_URL=$(gcloud run services describe $SERVICE_NAME --region $RUN_REGION --format=json|jq .status.url|sed "s/\"//g")
