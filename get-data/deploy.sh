@@ -1,5 +1,3 @@
-PROJECT_ID="your-project-id" # EDIT THIS!
-
 TOPIC_ID="tasks-topic"
 FUNCTION_NAME="tasks-getData"
 REGION="europe-west1" # Needs to be a supported region

@@ -1,4 +1,4 @@
-export PROJECT_ID="your-project-id" # EDIT THIS!
+export PROJECT_ID="scheduling-demo"
 
 export REGION="europe-north1"
 export APPENGINE_REGION="europe-west"

@@ -1,5 +1,4 @@
 # EDIT THESE!
-PROJECT_ID="your-project-id"
 TASK_URL="https://task-handler-RANDOM_STRING.a.run.app" # Task handler endpoint; get after deploying Cloud Run
 
 TOPIC_ID="tasks-topic"
