@@ -1,13 +1,18 @@
 #!/bin/bash
-export SERVICE_NAME="task-handler"
-export REGION="europe-north1"
-SA_NAME="sa-task-handler" # Service account name
+SERVICE_NAME="task-handler"
 
-gcloud beta run deploy $SERVICE_NAME \
+gcloud artifacts repositories create $REGISTRY_NAME \
+  --location=$REGION \
+  --repository-format=docker
+
+gcloud run deploy $SERVICE_NAME \
   --region $REGION \
   --platform managed \
   --source . \
   --memory 1Gi \
   --timeout 15 \
   --max-instances 100 \
-  --service-account $SA_NAME
+  --allow-unauthenticated \
+  --service-account $TASKHANDLER_USERNAME
+
+export TASK_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format=json|jq .status.url|sed "s/\"//g")
