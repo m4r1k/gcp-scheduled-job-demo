@@ -23,6 +23,7 @@ gcloud services enable run.googleapis.com
 gcloud services enable appengine.googleapis.com
 gcloud services enable pubsub.googleapis.com
 gcloud services enable appengine.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
 
 # Create service accounts
 gcloud iam service-accounts create $SCHEDULER_USERNAME \
