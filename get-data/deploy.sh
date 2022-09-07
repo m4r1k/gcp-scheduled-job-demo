@@ -1,9 +1,6 @@
 #!/bin/bash
-TOPIC_ID="tasks-topic"
 FUNCTION_NAME="tasks-getData"
-REGION="europe-west1" # Needs to be a supported region
-ENTRY_POINT="getData" # This is the actual exported function name
-SA_NAME="sa-get-data" # Service account name
+ENTRY_POINT="getData"
 
 # Deploy
 gcloud functions deploy $FUNCTION_NAME \
@@ -13,5 +10,5 @@ gcloud functions deploy $FUNCTION_NAME \
   --timeout 10 \
   --memory 1Gi \
   --entry-point $ENTRY_POINT \
-  --service-account $SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+  --service-account $GETDATA_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
   --set-env-vars PROJECT_ID=$PROJECT_ID,TOPIC_ID=$TOPIC_ID
