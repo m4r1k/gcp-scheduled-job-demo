@@ -4,7 +4,7 @@
 source ./env
 
 # Update gcloud
-gcloud components update
+gcloud components update || true
 
 # Set up new project
 gcloud projects create $PROJECT_ID
