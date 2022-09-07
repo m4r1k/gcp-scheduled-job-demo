@@ -29,16 +29,16 @@ gcloud services enable appengine.googleapis.com
 
 # Create service accounts
 gcloud iam service-accounts create $SCHEDULER_USERNAME \
-  --display-name $SCHEDULER_DISPLAYNAME
+  --display-name $"SCHEDULER_DISPLAYNAME"
 
 gcloud iam service-accounts create $CREATEHTTPTASK_USERNAME \
-  --display-name $CREATEHTTPTASK_DISPLAYNAME
+  --display-name $"CREATEHTTPTASK_DISPLAYNAME"
 
 gcloud iam service-accounts create $GETDATA_USERNAME \
-  --display-name $GETDATA_DISPLAYNAME
+  --display-name $"GETDATA_DISPLAYNAME"
 
 gcloud iam service-accounts create $TASKHANDLER_USERNAME \
-  --display-name $TASKHANDLER_DISPLAYNAME
+  --display-name $"TASKHANDLER_DISPLAYNAME"
 
 # Set service account roles
 gcloud projects add-iam-policy-binding $PROJECT_ID \
