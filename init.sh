@@ -76,7 +76,6 @@ gcloud tasks queues create $QUEUE_ID
 cd task-handler
 sh deploy.sh
 cd ..
-echo "Now you should add the Cloud Run endpoint to create-http-task/deploy.sh!"
 cd create-http-task
 sh deploy.sh
 cd ..
