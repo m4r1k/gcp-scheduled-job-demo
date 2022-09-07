@@ -3,9 +3,6 @@
 # Inpot all varialbes
 source ./env
 
-# Update gcloud
-gcloud components update || true
-
 # Set up new project
 gcloud projects create $PROJECT_ID
 gcloud config set project $PROJECT_ID
