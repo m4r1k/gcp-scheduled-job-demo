@@ -1,3 +1,4 @@
+#!/bin/bash
 TOPIC_ID="tasks-topic"
 FUNCTION_NAME="tasks-getData"
 REGION="europe-west1" # Needs to be a supported region

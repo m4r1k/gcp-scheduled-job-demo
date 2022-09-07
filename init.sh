@@ -1,3 +1,4 @@
+#!/bin/bash
 export PROJECT_ID="scheduling-demo"
 
 export REGION="europe-north1"

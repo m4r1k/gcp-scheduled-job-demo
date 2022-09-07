@@ -1,3 +1,4 @@
+#!/bin/bash
 # EDIT THESE!
 TASK_URL="https://task-handler-RANDOM_STRING.a.run.app" # Task handler endpoint; get after deploying Cloud Run
 

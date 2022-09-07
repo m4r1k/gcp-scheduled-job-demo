@@ -1,3 +1,4 @@
+#!/bin/bash
 export SERVICE_NAME="task-handler"
 export REGION="europe-north1"
 SA_NAME="sa-task-handler" # Service account name
