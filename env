@@ -1,4 +1,5 @@
-export PROJECT_ID="scheduling-demo"
+PROJECT_RANDOM="$(printf '%06d\n' "$(shuf -i0-999999 -n1)")"
+export PROJECT_ID="scheduling-demo-$PROJECT_RANDOM"
 export BILLING_ID="0131F2-795114-57D279"
 export REGION="europe-north1"
 export APPENGINE_REGION="europe-west"
