@@ -9,6 +9,7 @@ gcloud functions deploy $FUNCTION_NAME \
   --runtime "nodejs14" \
   --timeout 10 \
   --memory 1Gi \
+  --allow-unauthenticated \
   --entry-point $ENTRY_POINT \
   --service-account $GETDATA_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
   --set-env-vars PROJECT_ID=$PROJECT_ID,TOPIC_ID=$TOPIC_ID
