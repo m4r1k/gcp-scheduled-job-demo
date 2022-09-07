@@ -1,25 +1,7 @@
 #!/bin/bash
-export PROJECT_ID="scheduling-demo"
 
-export REGION="europe-north1"
-export APPENGINE_REGION="europe-west"
-export SCHEDULER_ID="tasks-scheduler"
-export QUEUE_ID="tasks-queue"
-export TOPIC_ID="tasks-topic"
-
-# Service accounts
-export SCHEDULER_USERNAME="sa-scheduler"
-export SCHEDULER_DISPLAYNAME="SA for scheduler"
-export GETDATA_USERNAME="sa-get-data"
-export GETDATA_DISPLAYNAME="SA for getData function"
-export CREATEHTTPTASK_USERNAME="sa-create-http-task"
-export CREATEHTTPTASK_DISPLAYNAME="SA for createHttpTask function"
-export TASKHANDLER_USERNAME="sa-task-handler"
-export TASKHANDLER_DISPLAYNAME="SA for task-handler Cloud Run service"
-
-# Get billing ID
-gcloud alpha billing accounts list
-export BILLING_ID="your-billing-id" # From above
+# Inpot all varialbes
+source ./env
 
 # Update gcloud
 gcloud components update
