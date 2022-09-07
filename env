@@ -6,6 +6,8 @@ export APPENGINE_REGION="europe-west"
 export SCHEDULER_ID="tasks-scheduler"
 export QUEUE_ID="tasks-queue"
 export TOPIC_ID="tasks-topic"
+export REGISTRY_NAME="cloud-run-source-deploy"
+
 
 # Service accounts
 export SCHEDULER_USERNAME="sa-scheduler"
