@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Inpot all varialbes
-source ./env
+source ./environment
 
 # Set up new project
 gcloud projects create $PROJECT_ID
