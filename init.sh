@@ -74,13 +74,13 @@ gcloud tasks queues create $QUEUE_ID
 
 # Deploy Cloud Functions and Cloud Run
 cd task-handler
-sh deploy.sh
+bash deploy.sh
 cd ..
 cd create-http-task
-sh deploy.sh
+bash deploy.sh
 cd ..
 cd get-data
-sh deploy.sh
+bash deploy.sh
 cd ..
 
 # Create Cloud Scheduler
