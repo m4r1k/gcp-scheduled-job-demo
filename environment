@@ -9,7 +9,6 @@ export QUEUE_ID="tasks-queue"
 export TOPIC_ID="tasks-topic"
 export REGISTRY_NAME="cloud-run-source-deploy"
 
-
 # Service accounts
 export SCHEDULER_USERNAME="sa-scheduler"
 export SCHEDULER_DISPLAYNAME="SA for scheduler"
@@ -19,3 +18,7 @@ export CREATEHTTPTASK_USERNAME="sa-create-http-task"
 export CREATEHTTPTASK_DISPLAYNAME="SA for createHttpTask function"
 export TASKHANDLER_USERNAME="sa-task-handler"
 export TASKHANDLER_DISPLAYNAME="SA for task-handler Cloud Run service"
+
+# Dynamic variable
+export TASK_URL_FILE="$(mktemp)"
+export GET_DATA_URL_FILE="$(mktemp)"

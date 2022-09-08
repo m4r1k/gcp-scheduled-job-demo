@@ -2,6 +2,8 @@
 FUNCTION_NAME="tasks-createHttpTask"
 ENTRY_POINT="createHttpTask"
 
+TASK_URL=$(cat $TASK_URL_FILE)
+
 # Deploy
 gcloud functions deploy $FUNCTION_NAME \
   --region $FUNCTIONS_REGION \

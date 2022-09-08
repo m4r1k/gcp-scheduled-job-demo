@@ -83,11 +83,15 @@ cd get-data
 bash deploy.sh
 cd ..
 
+GET_DATA_URL=$(cat $GET_DATA_URL_FILE)
+
 # Create Cloud Scheduler
 gcloud beta scheduler jobs create http $SCHEDULER_ID \
   --schedule "every 1 mins" \
   --uri $GET_DATA_URL \
   --http-method GET \
   --oidc-service-account-email $SCHEDULER_USERNAME@$PROJECT_ID.iam.gserviceaccount.com
+
+rm -f $TASK_URL_FILE $GET_DATA_URL_FILE || true
 
 echo "Congratulations! The entire flow should now be up and running once every minute. Check the logs at https://console.cloud.google.com/logs/ and see what you find."

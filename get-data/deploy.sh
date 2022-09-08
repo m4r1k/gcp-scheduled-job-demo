@@ -14,4 +14,4 @@ gcloud functions deploy $FUNCTION_NAME \
   --service-account $GETDATA_USERNAME@$PROJECT_ID.iam.gserviceaccount.com \
   --set-env-vars PROJECT_ID=$PROJECT_ID,TOPIC_ID=$TOPIC_ID
 
-export GET_DATA_URL=$(gcloud functions describe $FUNCTION_NAME --region $FUNCTIONS_REGION --format=json|jq .httpsTrigger.url|sed "s/\"//g")
+gcloud functions describe $FUNCTION_NAME --region $FUNCTIONS_REGION --format=json|jq .httpsTrigger.url|sed "s/\"//g" > $GET_DATA_URL_FILE

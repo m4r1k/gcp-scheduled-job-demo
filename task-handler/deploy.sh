@@ -15,4 +15,4 @@ gcloud run deploy $SERVICE_NAME \
   --allow-unauthenticated \
   --service-account $TASKHANDLER_USERNAME
 
-export TASK_URL=$(gcloud run services describe $SERVICE_NAME --region $RUN_REGION --format=json|jq .status.url|sed "s/\"//g")
+gcloud run services describe $SERVICE_NAME --region $RUN_REGION --format=json|jq .status.url|sed "s/\"//g" > $TASK_URL_FILE
